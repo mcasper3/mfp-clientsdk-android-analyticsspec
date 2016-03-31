@@ -13,9 +13,8 @@
 
 package com.ibm.mobilefirstplatform.clientsdk.android.logger.api;
 
-import android.util.Log;
-
 import com.ibm.mobilefirstplatform.clientsdk.android.logger.internal.LogPersisterInterface;
+import com.ibm.mobilefirstplatform.clientsdk.android.logger.internal.NoOpLogPersisterInterface;
 
 import org.json.JSONObject;
 
@@ -92,7 +91,7 @@ public final class Logger {
     //Use this flag to determine if internal debug and info logs should be output to Logcat or not:
     protected static boolean internalDebugLoggingEnabled = false;
 
-    protected static LogPersisterInterface logPersister = null;
+    protected static LogPersisterInterface logPersister = new NoOpLogPersisterInterface();
 
     /**
      * Levels supported in this Logger class.
@@ -172,13 +171,7 @@ public final class Logger {
      * @param desiredLevel @see LEVEL
      */
     static public void setLogLevel(final LEVEL desiredLevel) {
-        //No configuration persistence unless the Analytics SDK has been included:
-        if(logPersister == null){
-            level = desiredLevel;
-        }
-        else{
-            logPersister.setLogLevel(desiredLevel);
-        }
+        logPersister.setLogLevel(desiredLevel);
     }
 
     /**
@@ -187,13 +180,7 @@ public final class Logger {
      * @return Logger.LEVEL
      */
     static public LEVEL getLogLevel() {
-        //No configuration persistence unless the Analytics SDK has been included:
-        if(logPersister == null){
-            return level;
-        }
-        else{
-            return logPersister.getLogLevel();
-        }
+        return logPersister.getLogLevel();
     }
 
     /**
@@ -202,10 +189,7 @@ public final class Logger {
      * @param shouldStoreLogs flag to indicate if log data should be saved persistently
      */
     static public void storeLogs(final boolean shouldStoreLogs) {
-        //No-op unless the Analytics SDK has been included:
-        if(logPersister != null){
-            logPersister.storeLogs(shouldStoreLogs);
-        }
+        logPersister.storeLogs(shouldStoreLogs);
     }
 
     /**
@@ -214,13 +198,7 @@ public final class Logger {
      * @return true if logs are being stored
      */
     static public boolean isStoringLogs() {
-        //No-op unless the Analytics SDK has been included:
-        if(logPersister == null){
-            return false;
-        }
-        else{
-            return logPersister.isStoringLogs();
-        }
+        return logPersister.isStoringLogs();
     }
 
     /**
@@ -230,10 +208,7 @@ public final class Logger {
      * @param bytes maximum size of the file in bytes, minimum 10000
      */
     static public void setMaxLogStoreSize(final int bytes) {
-        //No-op unless the Analytics SDK has been included:
-        if(logPersister != null){
-            logPersister.setMaxLogStoreSize(bytes);
-        }
+        logPersister.setMaxLogStoreSize(bytes);
     }
 
     /**
@@ -242,13 +217,7 @@ public final class Logger {
      * @return current max file size threshold
      */
     static public int getMaxLogStoreSize() {
-        //No-op unless the Analytics SDK has been included:
-        if(logPersister == null){
-            return -1;
-        }
-        else{
-            return logPersister.getMaxLogStoreSize();
-        }
+        return logPersister.getMaxLogStoreSize();
     }
 
     /**
@@ -306,10 +275,7 @@ public final class Logger {
      * @param listener Response listener which specifies a success and failure callback
      */
     static public void send (Object listener) {
-        //No-op unless the Analytics SDK has been included:
-        if(logPersister != null){
-            logPersister.send(listener);
-        }
+        logPersister.send(listener);
     }
 
     /**
@@ -318,13 +284,7 @@ public final class Logger {
      * @return boolean if an uncaught exception log entry is currently in the persistent log buffer
      */
     static public boolean isUnCaughtExceptionDetected () {
-        //No-op unless the Analytics SDK has been included:
-        if(logPersister == null){
-            return false;
-        }
-        else{
-            return logPersister.isUncaughtExceptionDetected();
-        }
+        return logPersister.isUncaughtExceptionDetected();
     }
 
     //region Logger API - instance methods
@@ -339,7 +299,6 @@ public final class Logger {
     }
 
     /**
-     * @exclude
      *
      * Log at ANALYTICS level.
      *
@@ -460,35 +419,7 @@ public final class Logger {
     }
 
     protected void doLog(final LEVEL calledLevel, String message, final long timestamp, final Throwable t, JSONObject additionalMetadata) {
-        if(logPersister == null){
-            boolean canLog = (calledLevel != null) && calledLevel.isLoggable();
-
-            if (canLog || (calledLevel == Logger.LEVEL.ANALYTICS)) {
-                message = (null == message) ? "(null)" : message;  // android.util.Log can't handle null, so protect it
-                switch (calledLevel) {
-                    case FATAL:
-                    case ERROR:
-                        if (null == t) { Log.e(getName(), message); } else { Log.e(getName(), message, t); }
-                        break;
-                    case WARN:
-                        if (null == t) { Log.w(getName(), message); } else { Log.w(getName(), message, t); }
-                        break;
-                    case INFO:
-                        if (null == t) { Log.i(getName(), message); } else { Log.i(getName(), message, t); }
-                        break;
-                    case DEBUG:
-                        if(!Logger.isInternalLogger(this) || Logger.isSDKDebugLoggingEnabled()){
-                            if (null == t) { Log.d(getName(), message); } else { Log.d(getName(), message, t); }
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-        else{
-            logPersister.doLog(calledLevel, message, timestamp, t, additionalMetadata, this);
-        }
+        logPersister.doLog(calledLevel, message, timestamp, t, additionalMetadata, this);
     }
 
     //endregion
