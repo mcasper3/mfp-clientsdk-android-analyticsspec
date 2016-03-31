@@ -47,7 +47,7 @@ public class Analytics {
             Class stringClass = String.class;
             Class deviceEventClass = DeviceEvent[].class;
 
-            Method initMethod = analyticsClass.getMethod("init",stringClass, stringClass, deviceEventClass);
+            Method initMethod = analyticsClass.getMethod("init", Application.class, stringClass, stringClass, deviceEventClass);
 
             initMethod.invoke(null, new Object[] {application, applicationName, clientApiKey, contexts});
         } catch (Throwable e) {
