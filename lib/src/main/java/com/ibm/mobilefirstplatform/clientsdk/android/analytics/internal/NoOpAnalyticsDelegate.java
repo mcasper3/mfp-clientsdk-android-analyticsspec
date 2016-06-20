@@ -47,6 +47,11 @@ public class NoOpAnalyticsDelegate implements AnalyticsDelegate{
     }
 
     @Override
+    public void logInteraction(JSONObject eventMetadata) {
+        //no op
+    }
+
+    @Override
     public void setUserIdentity(String username) {
         //no op
     }
