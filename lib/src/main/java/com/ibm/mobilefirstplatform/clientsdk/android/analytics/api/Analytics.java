@@ -89,6 +89,12 @@ public class Analytics {
         }
     }
 
+    public static void logInteraction(JSONObject eventMetadata) {
+        if (analyticsDelegate != null) {
+            analyticsDelegate.logInteraction(eventMetadata);
+        }
+    }
+
     public static void setUserIdentity(String username){
         if(analyticsDelegate != null){
             analyticsDelegate.setUserIdentity(username);

@@ -24,6 +24,7 @@ public interface AnalyticsDelegate {
     void send(Object responseListener); //responseListener should be of the type ResponseListener in the Core SDK.
 
     void log(JSONObject eventMetadata);
+    void logInteraction(JSONObject eventMetadata);
 
     void setUserIdentity(String username);
     void clearUserIdentity();

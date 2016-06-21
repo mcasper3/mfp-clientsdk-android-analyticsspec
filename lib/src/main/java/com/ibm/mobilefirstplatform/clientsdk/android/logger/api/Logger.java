@@ -100,12 +100,13 @@ public final class Logger {
         /**
          * @exclude
          */
-        ANALYTICS { @Override protected int getLevelValue() {return  25;}; }, // Specifies data needs to go to analytics file
-        FATAL	  { @Override protected int getLevelValue() {return  50;}; },
-        ERROR     { @Override protected int getLevelValue() {return 100;}; },
-        WARN      { @Override protected int getLevelValue() {return 200;}; },
-        INFO      { @Override protected int getLevelValue() {return 300;}; },
-        DEBUG     { @Override protected int getLevelValue() {return 400;}; };
+        ANALYTICS    { @Override protected int getLevelValue() {return  25;} }, // Specifies data needs to go to analytics file
+        INTERACTIONS { @Override protected int getLevelValue() {return  25;} }, // Specifies data needs to go to interactions file
+        FATAL	     { @Override protected int getLevelValue() {return  50;} },
+        ERROR        { @Override protected int getLevelValue() {return 100;} },
+        WARN         { @Override protected int getLevelValue() {return 200;} },
+        INFO         { @Override protected int getLevelValue() {return 300;} },
+        DEBUG        { @Override protected int getLevelValue() {return 400;} };
 
         protected abstract int getLevelValue();
 
@@ -306,6 +307,15 @@ public final class Logger {
      */
     public void analytics(final String message, JSONObject additionalMetadata) {
         doLog(LEVEL.ANALYTICS, message, (new Date()).getTime(), null, additionalMetadata);
+    }
+
+    /**
+     * Log at INTERACTIONS level.
+     *
+     *
+     */
+    public void interactions(final String message, JSONObject additionalMetadata) {
+        doLog(LEVEL.INTERACTIONS, message, (new Date()).getTime(), null, additionalMetadata);
     }
 
     /**
