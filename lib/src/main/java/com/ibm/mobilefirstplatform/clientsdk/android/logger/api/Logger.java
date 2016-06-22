@@ -314,8 +314,8 @@ public final class Logger {
      *
      *
      */
-    public void interactions(final String message, JSONObject additionalMetadata) {
-        doLog(LEVEL.INTERACTIONS, message, (new Date()).getTime(), null, additionalMetadata);
+    public void interactions(JSONObject additionalMetadata) {
+        doLog(LEVEL.INTERACTIONS, "", (new Date()).getTime(), null, additionalMetadata);
     }
 
     /**
