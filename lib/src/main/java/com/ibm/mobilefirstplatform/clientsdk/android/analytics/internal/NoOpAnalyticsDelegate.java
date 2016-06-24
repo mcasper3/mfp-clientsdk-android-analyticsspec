@@ -42,6 +42,16 @@ public class NoOpAnalyticsDelegate implements AnalyticsDelegate{
     }
 
     @Override
+    public void sendInteractions() {
+        //no op
+    }
+
+    @Override
+    public void sendInteractions(Object responseListener) {
+        //no op
+    }
+
+    @Override
     public void log(JSONObject eventMetadata) {
         //no op
     }

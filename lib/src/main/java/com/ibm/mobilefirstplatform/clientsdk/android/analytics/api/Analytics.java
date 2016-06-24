@@ -83,6 +83,18 @@ public class Analytics {
         }
     }
 
+    public static void sendInteractions() {
+        if (analyticsDelegate != null) {
+            analyticsDelegate.sendInteractions();
+        }
+    }
+
+    public static void sendInteractions(Object responseListener) {
+        if (analyticsDelegate != null) {
+            analyticsDelegate.sendInteractions(responseListener);
+        }
+    }
+
     public static void log(JSONObject eventMetadata){
         if(analyticsDelegate != null){
             analyticsDelegate.log(eventMetadata);

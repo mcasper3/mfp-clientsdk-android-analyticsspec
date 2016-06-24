@@ -23,6 +23,9 @@ public interface AnalyticsDelegate {
     void send();
     void send(Object responseListener); //responseListener should be of the type ResponseListener in the Core SDK.
 
+    void sendInteractions();
+    void sendInteractions(Object responseListener);
+
     void log(JSONObject eventMetadata);
     void logInteraction(JSONObject eventMetadata);
 
